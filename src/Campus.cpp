@@ -182,7 +182,7 @@ void Campus::printAdjacencyList(){
 }
 
 int Campus::getDegree(std::string building){
-    return connections.at(building).size() + 1;
+    return connections.at(building).size();
 }
 
 void Campus::printDegrees(){
@@ -246,8 +246,16 @@ void Campus::printWalkability(std::string building){
         distance++;
     }
     while (!total.empty()){
-        std::cout << "-" << total.front() << ": " << buildings2.at(total.front()).first << std::endl;
+        std::cout << "-" << total.front() << ", distance: " << buildings2.at(total.front()).first << std::endl;
         total.pop();
     }
 
+}
+
+std::list<std::string> Campus::copyBuildings(){
+    std::list<std::string> copy;
+    for (std::string x : buildings){
+        copy.push_back(x);
+    }
+    return copy;
 }
