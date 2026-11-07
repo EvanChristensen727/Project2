@@ -7,15 +7,26 @@
 #include <list>
 #include <fstream>
 #include <iostream>
+#include <queue>
+#include <algorithm>
 
 class Campus{
     public:
         bool loadBuildings(std::string path = "../data/buildings.txt");
         bool loadConnections(std::string path = "../data/connections.txt");
         void printAdjacencyList();
+        void printDegrees();
+        int getDegree(std::string building);
+        int getPaths();
+        void printBuildings();
+        void printWalkability(std::string building);
+        std::string trimName(std::string name);
+        std::string lowercase(std::string upper);
 
     private:
+        int paths;
         std::unordered_map<std::string, std::list<std::string>> connections;
+        std::list<std::string> buildings;
 
 
 };

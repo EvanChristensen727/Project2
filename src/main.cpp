@@ -6,7 +6,7 @@ int main(){
   campus_map.loadBuildings();
   campus_map.loadConnections();
 
-  campus_map.printAdjacencyList();
+  
   
   return 0;
 }
