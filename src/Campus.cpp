@@ -42,7 +42,7 @@ std::string Campus::lowercase(std::string upper){
 
 bool Campus::loadBuildings(std::string path){
     int rej = 0;
-    
+    path += "buildings.txt";
     std::ifstream input(path);
 
     if (!input.is_open()){
@@ -88,6 +88,7 @@ bool Campus::loadBuildings(std::string path){
 }    
 
 bool Campus::loadConnections(std::string path){
+    path += "connections.txt";
     std::ifstream input(path);
     int rej = 0;
     if (!input.is_open()){

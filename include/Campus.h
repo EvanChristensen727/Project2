@@ -12,8 +12,8 @@
 
 class Campus{
     public:
-        bool loadBuildings(std::string path = "../data/buildings.txt");
-        bool loadConnections(std::string path = "../data/connections.txt");
+        bool loadBuildings(std::string path);
+        bool loadConnections(std::string path);
         void printAdjacencyList();
         void printDegrees();
         int getDegree(std::string building);

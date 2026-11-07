@@ -1,10 +1,16 @@
 #include "Campus.cpp"
 using namespace std;
-int main(){
+int main(int argc, char* argv[]){
   Campus campus_map;
   
-  campus_map.loadBuildings();
-  campus_map.loadConnections();
+
+  string dataPath = "../data/";
+  if (argc > 1){
+    dataPath = argv[1];
+  }
+
+  campus_map.loadBuildings(dataPath);
+  campus_map.loadConnections(dataPath);
 
   
   
