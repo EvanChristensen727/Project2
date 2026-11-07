@@ -3,7 +3,7 @@ using namespace std;
 int main(int argc, char* argv[]){
   Campus campus_map;
   
-
+  //Logic for handling the command line argument for the data path
   string dataPath = "../data/";
   if (argc > 1){
     dataPath = argv[1];

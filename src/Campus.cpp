@@ -1,5 +1,7 @@
 #include "../include/Campus.h"
 
+
+//Removes whitespace from the beginning and end of a string
 std::string Campus::trimName(std::string name){
     std::string halfTrim = "";
     std::string fullTrim = "";
@@ -32,6 +34,7 @@ std::string Campus::trimName(std::string name){
     
 }
 
+//Converts a string so that all characters are lowercase
 std::string Campus::lowercase(std::string upper){
     std::string rebuild = "";
     for (char c : upper){
@@ -40,6 +43,7 @@ std::string Campus::lowercase(std::string upper){
     return rebuild;
 }
 
+//Loads buildings.txt from the folder "path" into the buildings list, filtering out any incorrect lines
 bool Campus::loadBuildings(std::string path){
     int rej = 0;
     path += "buildings.txt";
@@ -87,6 +91,7 @@ bool Campus::loadBuildings(std::string path){
     return true;
 }    
 
+//Loads connections.txt from the folder "path" into the connection undirected map to create an adjacency list, filtering out any incorrect lines
 bool Campus::loadConnections(std::string path){
     path += "connections.txt";
     std::ifstream input(path);
@@ -166,6 +171,7 @@ bool Campus::loadConnections(std::string path){
     return true;
 }
 
+//Prints the adjacency list in order of each being added, specifying if there are no connections
 void Campus::printAdjacencyList(){
     if (buildings.size() == 0){
         std::cout << "There are no buildings" << std::endl;
@@ -181,26 +187,32 @@ void Campus::printAdjacencyList(){
     }
 }
 
+//Returns the out-degree of input
 int Campus::getDegree(std::string building){
     return connections.at(building).size();
 }
 
+//Prints the out-degree of each building
 void Campus::printDegrees(){
     for (std::string x : buildings){
         std::cout << "-" << x << ": " << getDegree(x) << std::endl;
     }
 }
 
+//Returns the number of paths in connections
 int Campus::getPaths(){
     return paths;
 }
 
+//Prints the name of each building in buildings
 void Campus::printBuildings(){
     for (std::string x : buildings){
         std::cout << "-" << x << std::endl;
     }
 }
 
+//Runs a Breadth First Search from the input, printing out every reachable building and its distance form the input, as well as the input (at distance 0)
+//Will cancel if the input does not match any element in buildings (case-insensitive, whitespace trimmed)
 void Campus::printWalkability(std::string building){
     std::unordered_map<std::string, std::pair<int, bool>> buildings2;
     std::string trimmedBuilding = lowercase(trimName(building));
@@ -252,6 +264,8 @@ void Campus::printWalkability(std::string building){
 
 }
 
+
+//Returns a deep copy of buildings
 std::list<std::string> Campus::copyBuildings(){
     std::list<std::string> copy;
     for (std::string x : buildings){
