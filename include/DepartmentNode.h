@@ -17,7 +17,7 @@ class DepartmentNode{
 
 	private:
 		DepartmentNode* parent;
-		std::vector<DepartmentNode*> childen;
+		std::vector<DepartmentNode*> children;
 		std::string name;
 
 };
