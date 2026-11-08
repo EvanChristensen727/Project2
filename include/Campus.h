@@ -20,7 +20,7 @@ class Campus{
         int getPaths();
         void printBuildings();
         void printWalkability(std::string building);
-        std::string trimName(std::string name);
+        static std::string trimName(std::string name);
         std::string lowercase(std::string upper);
         std::list<std::string> copyBuildings();
 
