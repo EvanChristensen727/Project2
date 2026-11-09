@@ -1,4 +1,4 @@
-#include "Campus.cpp"
+#include "../include/Campus.h"
 using namespace std;
 int main(int argc, char* argv[]){
   Campus campus_map;
