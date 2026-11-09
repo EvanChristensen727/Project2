@@ -105,7 +105,7 @@ void FacilityHashTable::PrintTable() //done
         {
             for (list<Facility>::iterator it = table.at(i).begin(); it != table.at(i).end(); it++)
             {
-            cout << "\t";
+                cout << "\t";
                 (*it).Print();
             }
         }
