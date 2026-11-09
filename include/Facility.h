@@ -1,6 +1,7 @@
 #ifndef FACILITY_H
 #define FACILITY_H
     #include <string>
+    #include <iostream>
     
     using namespace std;
 
