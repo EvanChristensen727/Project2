@@ -1,4 +1,6 @@
 #include "../include/FacilityHashTable.h"
+#include <fstream>
+#include <sstream>
 
 FacilityHashTable::FacilityHashTable()
 {
@@ -26,8 +28,9 @@ bool FacilityHashTable::DataInTable(string f, bool c, bool m) //done
     //straight up reused code from an old AddData cut down.
     int index = HashFunc(f); 
     bool equal;
+    int count = 0;
 
-    if (index = -1)
+    if (index == -1)
     {
         cout << "Invalid Facility ID" << endl;
         return false;
@@ -47,7 +50,7 @@ bool FacilityHashTable::DataInTable(string f, bool c, bool m) //done
     {
         if (c)
         {
-            collisions++;
+            count++;
         }
         
         if ((*it).GetFacilityID().length() == f.length()) //save some time doing comparisons
@@ -75,6 +78,7 @@ bool FacilityHashTable::DataInTable(string f, bool c, bool m) //done
     {
         cout << "ID Not Found" << endl;
     }
+    collisions += count; //because if we are counting collisions, we should reach this area to confirm that we are adding a new id
     return false;
 }
 
@@ -112,4 +116,13 @@ void FacilityHashTable::PrintTable() //done
         cout << endl;
     }
     cout << "Collisions: " << collisions << endl;
+}
+
+void FacilityHashTable::ReadFacilities(string fileName)
+{
+    ifstream inputFile;
+	string line;
+    int count = 0;
+    int accept = 0;
+    int reject = 0;
 }
