@@ -12,7 +12,9 @@ class DepartmentTree{
 		void displayHierarchy();
 		void preorderTraversal();
 		std::string lowerCase(std::string target);
-
+		void displayDepartment(DepartmentNode* current);
+		bool loadDepartment(std::string fileName);
+		bool isEmpty() const;
 	private:
 		
 		DepartmentNode* root = nullptr;

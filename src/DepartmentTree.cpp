@@ -2,6 +2,8 @@
 #include "../include/Campus.h"
 #include <cctype>
 #include <iostream>
+#include <fstream>
+#include <sstream>
 
 DepartmentTree::DepartmentTree(){}
 
@@ -47,7 +49,7 @@ bool DepartmentTree::addDepartment(std::string name, std::string parentName){
 }
 
 DepartmentNode* DepartmentTree::SearchTree(std::string name){
-	return SearchTree(root, name); 
+	return SearchTree(root, name);
 }
 
 DepartmentNode* DepartmentTree::SearchTree(DepartmentNode* current, std::string name){
@@ -116,4 +118,101 @@ void DepartmentTree::preorderTraversal(DepartmentNode* current){
 	for(DepartmentNode* child : current->getChildren()){
 		preorderTraversal(child);
 	}
+}
+
+void DepartmentTree::displayDepartment(DepartmentNode* current){
+	if (current == nullptr){
+		std::cout << "invalid entry" << std::endl;
+		return;
+	}
+	std::cout << "Name: " << current->getName() << std::endl;
+	if(current->getParent() == nullptr){
+		std::cout << "Parent: NONE" << std::endl;
+	}
+	else{
+		std::cout << "Parent: " << current->getParent()->getName() << std::endl;
+	}
+	std::cout<< "Direct Children: " << current->getChildren().size() << std::endl;
+	int depth = 0;
+	DepartmentNode* node = current;
+	while(node->getParent() != nullptr){
+		depth += 1;
+		node = node->getParent();
+	}
+	std::cout << "Depth: " << depth << std::endl;
+
+}
+
+bool DepartmentTree::loadDepartment(std::string fileName){
+	std::ifstream inputFile;
+	std::string line;
+	int counter = 0;
+	int rejected = 0;
+	int accepted = 0;
+	inputFile.open(fileName);
+	if(!inputFile.is_open()){
+		std::cout << fileName << " failed to open" << std::endl;
+		return false;
+	}
+	while(getline(inputFile, line)){
+		std::string departmentName, parentName;
+		line = Campus::trimName(line);
+		std::stringstream ss(line);
+		counter ++;
+		if(line.empty() || line[0] == '#'){
+			continue;
+		}
+		else{
+			if(line.find('|') == std::string::npos){
+				std::cout << "WARNING! " << fileName << " at " << counter << " too few fields." <<std::endl;
+				rejected++;
+				continue;
+			}
+			getline(ss, departmentName, '|');
+			getline(ss, parentName);
+			departmentName = Campus::trimName(departmentName);
+			parentName = Campus::trimName(parentName);
+				if (departmentName.empty() || parentName.empty()){
+					std::cout << "WARNING " << fileName << " at " << counter << " has empty fields." << std::endl;
+					rejected++;
+					continue;
+				}
+			if(parentName.find('|') != std::string::npos){
+				std::cout << "WARNING! " << fileName << " at " << counter << " contains too many fields." << std::endl;
+				rejected++;
+				continue;
+			}
+			if (root == nullptr){
+				if (lowerCase(parentName) != "none"){
+					std::cout << "WARNING: " << fileName <<" Root parent must be NONE at: " << counter << std::endl;
+					rejected++;
+					continue;
+				}
+			}
+			else if(lowerCase(parentName) == "none"){
+				std::cout << "WARNING:" << fileName << " another root is not allowed at: " << counter << std::endl;
+				rejected++;
+				continue;
+			}
+			if(addDepartment(departmentName, parentName)){
+				accepted++;
+			}
+			else{
+				rejected++;
+				if (SearchTree(departmentName)){
+					std::cout << "Warning! " << fileName << " at " << counter << " duplicate department" << std::endl;
+				}
+				else{
+					std::cout << "Warning! " << fileName << " at " << counter << " Unknown parent: " << parentName << std::endl;
+				}
+			}
+		}
+	}
+	std::cout << "Departments loaded: " << accepted << std::endl;
+	std::cout << "Departments rejected: " << rejected << std::endl;
+	return true;
+}
+
+bool DepartmentTree::isEmpty() const{
+	return(root == nullptr);
 }

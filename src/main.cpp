@@ -1,8 +1,10 @@
 #include "Campus.cpp"
+#include "../include/DepartmentTree.h"
+#include "../include/DepartmentNode.h"
 using namespace std;
 int main(int argc, char* argv[]){
   Campus campus_map;
-  
+  DepartmentTree department;
   //Logic for handling the command line argument for the data path
   string dataPath = "../data/";
   if (argc > 1){
@@ -11,8 +13,11 @@ int main(int argc, char* argv[]){
 
   campus_map.loadBuildings(dataPath);
   campus_map.loadConnections(dataPath);
+  department.loadDepartment(dataPath + "departments.txt");
+
   cout << endl;
   string choice = "0";
+
   
   while (stoi(choice) != 10){
     cout << endl << "Please choose an option from the directory: \n1) View all facilities\n2) Search facilities by ID \n3) View campus graph \n4) Display graph counts and degrees \n5) Find reachable buildings (BFS)" <<endl;
@@ -50,17 +55,52 @@ int main(int argc, char* argv[]){
 
         }  
         break;
-      case 6:
+      case 6:{
+		string departmentName, parentName;
+		
+		cout << "Enter department name: ";
+		getline(cin, departmentName);
+	     
+		if (!department.isEmpty()) {
+			cout << "Enter parent department: ";
+			getline(cin, parentName);
+		}
+		else{
+			parentName = "NONE";
+		}
+		if(department.addDepartment(departmentName, parentName)){
+			cout << "success" << endl;
+	     	}
+		else{
+			cout << "failed to add department" << endl;
+		}
+		break;
+	}
         //Add department
         break;
-      case 7:
+      case 7:{
+		string departmentName;
+		cout << "Enter department name to search: ";
+		getline(cin, departmentName);
+		DepartmentNode* result = department.SearchTree(departmentName);
+		if(result != nullptr){
+			department.displayDepartment(result);
+			break;
+		}
+		else{
+			cout << "No department found!" << endl;
+			break;
+		}
+	     }
         //Search department
         break;
       case 8:
+	department.displayHierarchy();
         //Display department Hierarchy
         break;
       case 9:
         //Run preorder traversal
+	department.preorderTraversal();
         break;
       case 10:
         //exit
