@@ -50,12 +50,12 @@ bool FacilityHashTable::DataInTable(string f, bool c, bool m) //done
             collisions++;
         }
         
-        if (it.GetFacilityID().length() == f.length()) //save some time doing comparisons
+        if ((*it).GetFacilityID().length() == f.length()) //save some time doing comparisons
         {
             equal = true;
-            for (int i = 0; i < it.GetFacilityID().length(); i++)
+            for (int i = 0; i < (*it).GetFacilityID().length(); i++)
             {
-                if (toupper(it.GetFacilityID()[i]) != toupper(f[i]))
+                if (toupper((*it).GetFacilityID()[i]) != toupper(f[i]))
                 {
                     equal = false;
                     break; //saves more time on comparisons
@@ -104,7 +104,10 @@ void FacilityHashTable::PrintTable() //done
         else
         {
             for (list<Facility>::iterator it = table.at(i).begin(); it != table.at(i).end(); it++)
-                cout << "\t" << it.Print() << endl;
+            {
+            cout << "\t";
+                (*it).Print();
+            }
         }
         cout << endl;
     }
