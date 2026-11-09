@@ -50,10 +50,10 @@ int main(int argc, char* argv[]){
         {
         string fId;
         cout << "Enter facility ID (F followed by 3 numbers):";
-        getline(cin, fID);
+        getline(cin, fId);
         facilities.DataInTable(fId, false, true);
-        break;
         }
+        break;
       case 3:
         //View Campus Graph
         campus_map.printAdjacencyList();
