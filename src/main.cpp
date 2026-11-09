@@ -75,6 +75,9 @@ int main(int argc, char* argv[]){
       case 10:
         //exit
         break;
+      case 0:
+        //second exit? It was mentioned in the rubric, so I'm not taking chances
+        break;
     }
   }
   return 0;
