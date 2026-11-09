@@ -6,11 +6,11 @@
 #include <sstream>
 
 DepartmentTree::DepartmentTree(){}
-
+//deconstructor
 DepartmentTree::~DepartmentTree(){
 	deleteTree(root);
 }
-
+//used to clean up memeory
 void DepartmentTree::deleteTree(DepartmentNode* current){
 	if(current == nullptr){
 		return;
@@ -21,7 +21,7 @@ void DepartmentTree::deleteTree(DepartmentNode* current){
 	delete current;
 
 }
-
+//adds a departmentNode to tree
 bool DepartmentTree::addDepartment(std::string name, std::string parentName){
 	parentName = Campus::trimName(parentName);
 	name = Campus::trimName(name);
@@ -51,7 +51,7 @@ bool DepartmentTree::addDepartment(std::string name, std::string parentName){
 DepartmentNode* DepartmentTree::SearchTree(std::string name){
 	return SearchTree(root, name);
 }
-
+//search function implementation 
 DepartmentNode* DepartmentTree::SearchTree(DepartmentNode* current, std::string name){
 	if (current == nullptr){
 		return nullptr;
@@ -77,7 +77,7 @@ std::string DepartmentTree::lowerCase(std::string target){
 	}
 	return target;
 }
-
+//display full tree
 void DepartmentTree::displayHierarchy(){
 	if(root == nullptr){
 		std::cout <<"Tree is empty" << std::endl;
@@ -101,7 +101,7 @@ void DepartmentTree::displayHierarchy(int depth, DepartmentNode* current){
 	}
 
 }
-
+//trevereses tree from root left to right
 void DepartmentTree::preorderTraversal(){
 	if(root == nullptr){
 		std::cout <<"Tree is empty" << std::endl;
@@ -119,7 +119,7 @@ void DepartmentTree::preorderTraversal(DepartmentNode* current){
 		preorderTraversal(child);
 	}
 }
-
+//display current department info
 void DepartmentTree::displayDepartment(DepartmentNode* current){
 	if (current == nullptr){
 		std::cout << "invalid entry" << std::endl;
@@ -142,7 +142,7 @@ void DepartmentTree::displayDepartment(DepartmentNode* current){
 	std::cout << "Depth: " << depth << std::endl;
 
 }
-
+//pull deparntment nodes from file build tree checks for invalid data and gives report
 bool DepartmentTree::loadDepartment(std::string fileName){
 	std::ifstream inputFile;
 	std::string line;
