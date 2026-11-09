@@ -69,6 +69,7 @@ bool FacilityHashTable::DataInTable(string f, bool c, bool m) //done
                 if (m)
                 {
                     cout << "ID Found" << endl;
+                    (*it).Print();
                 }
                 return true;
             }
@@ -100,22 +101,16 @@ void FacilityHashTable::PrintTable() //done
 {
     for (int i = 0; i < HASHTABLE_SIZE; i++)
     {   
-        cout << "Bucket " << i << ":\n"; 
-        if (table.at(i).empty())
-        {
-            cout << "\tEMPTY" << endl;
-        }
-        else
+        if (!table.at(i).empty())
         {
             for (list<Facility>::iterator it = table.at(i).begin(); it != table.at(i).end(); it++)
             {
-                cout << "\t";
                 (*it).Print();
             }
         }
         cout << endl;
     }
-    cout << "Collisions: " << collisions << endl;
+    //cout << "Collisions: " << collisions << endl;
 }
 
 //taken from campus to make life easier for me
@@ -160,7 +155,7 @@ string FacilityHashTable::StrTrim(string name)
     return fullTrim;
 }
 
-bool FacilityHashTable::ReadFacilities(string fileName)
+bool FacilityHashTable::LoadFacilities(string fileName)
 {
     ifstream inputFile; //reusing some stuff from a teammate, thank you Blair <3
 	string line;

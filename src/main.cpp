@@ -1,10 +1,12 @@
 #include "../include/Campus.h"
 #include "../include/DepartmentTree.h"
 #include "../include/DepartmentNode.h"
+#include "../include/FacilityHashTable.h"
 using namespace std;
 int main(int argc, char* argv[]){
   Campus campus_map;
   DepartmentTree department;
+  FacilityHashTable facilities;
   //Logic for handling the command line argument for the data path
   string dataPath = "../data/";
   if (argc > 1){
@@ -14,6 +16,7 @@ int main(int argc, char* argv[]){
   campus_map.loadBuildings(dataPath);
   campus_map.loadConnections(dataPath);
   department.loadDepartment(dataPath + "departments.txt");
+  facilities.LoadFacilities(dataPath + "facilities.txt");
 
   cout << endl;
   string choice = "0";
@@ -40,9 +43,14 @@ int main(int argc, char* argv[]){
         break;
       case 1:
         //View all Facilities
+        facilities.PrintTable();
         break;
       case 2:
         //Search facilities by ID
+        string fId;
+        cout << "Enter facility ID (F followed by 3 numbers):"
+        getline(cin, fID);
+        facilities.DataInTable(fId, false, true);
         break;
       case 3:
         //View Campus Graph
