@@ -86,7 +86,7 @@ void FacilityHashTable::AddData(Facility d) //done
 {
     int index = HashFunc(d.GetFacilityID());
     bool equal;
-    if (!DataInTable(d.GetFacilityID(), true, false)) //if the data is not in the table (count collisions), then add it
+    if (!DataInTable(d.GetFacilityID(), true, false) && index != -1) //if the data is not in the table (count collisions), then add it
     {
         table.at(index).push_back(d);
         cout << "\"" << d.GetFacilityID() << "\" added to hash table at index " << index << endl;
@@ -118,6 +118,48 @@ void FacilityHashTable::PrintTable() //done
     cout << "Collisions: " << collisions << endl;
 }
 
+//taken from campus to make life easier for me
+string FacilityHashTable::StrTrim(string name)
+{
+    string halfTrim = "";
+    string fullTrim = "";
+
+    //starting trim
+    bool start = false;
+    for (char c : name)
+    {
+        if (!start)
+        {
+            if (!start && c != ' ')
+            {
+                halfTrim += c;
+                start = true;
+            }
+        }
+        else
+        {
+            halfTrim += c;
+        }
+    }
+
+    //ending trim
+    std::string heldSpace = "";
+    for (char c : halfTrim)
+    {
+        if (c == ' ')
+        {
+            heldSpace += c;
+        }
+        else
+        {
+            fullTrim += heldSpace + c;
+            heldSpace = "";
+        }
+    }
+   
+    return fullTrim;
+}
+
 bool FacilityHashTable::ReadFacilities(string fileName)
 {
     ifstream inputFile; //reusing some stuff from a teammate, thank you Blair <3
@@ -137,7 +179,7 @@ bool FacilityHashTable::ReadFacilities(string fileName)
     while(getline(inputFile, line))
     {
 		string f, n, b, c; //facilityID, facility name, building, category
-		//line = Campus::trimName(line);
+		line = StrTrim(line);
 		stringstream ss(line);
 		counter++;
 
@@ -157,53 +199,49 @@ bool FacilityHashTable::ReadFacilities(string fileName)
 			getline(ss, f, '|');
             getline(ss, n, '|');
             getline(ss, b, '|');
-			getline(ss, s);
-			//departmentName = Campus::trimName(departmentName);
-			//parentName = Campus::trimName(parentName);
-            /*
-			if (departmentName.empty() || parentName.empty())
+			getline(ss, c);
+			f = StrTrim(f);
+			n = StrTrim(n);
+            b = StrTrim(b);
+            c = StrTrim(c);
+            
+			if (f.empty() || n.empty() || b.empty() || c.empty())
             {
 				std::cout << "WARNING " << fileName << " at " << counter << " has empty fields." << std::endl;
 				rejected++;
 				continue;
 			}
-			if(parentName.find('|') != std::string::npos)
+			if(c.find('|') != std::string::npos)
             {
 				std::cout << "WARNING! " << fileName << " at " << counter << " contains too many fields." << std::endl;
 				rejected++;
 				continue;
 			}
-			if (root == nullptr)
+			if (HashFunc(f) == -1)
             {
-				if (lowerCase(parentName) != "none"){
-					std::cout << "WARNING: " << fileName <<" Root parent must be NONE at: " << counter << std::endl;
-					rejected++;
-					continue;
-				}
-			}
-			else if(lowerCase(parentName) == "none")
-            {
-				std::cout << "WARNING:" << fileName << " another root is not allowed at: " << counter << std::endl;
-				rejected++;
+				cout << "WARNING! " << fileName << " at " << counter << " has invalid FacilityID." << endl;
+                rejected++;
 				continue;
 			}
-			if(addDepartment(departmentName, parentName))
+			if(!DataInTable(f, false, false))
             {
+                Facilty fac(f,n,b,c);
+                AddData(fac);
 				accepted++;
 			}
 			else
             {
 				rejected++;
-				if (SearchTree(departmentName))
+				if (DataInTable(f, false, false))
                 {
-					std::cout << "Warning! " << fileName << " at " << counter << " duplicate department" << std::endl;
+					std::cout << "WARNING! " << fileName << " at " << counter << " duplicate facility ID" << std::endl;
 				}
 				else
                 {
-					std::cout << "Warning! " << fileName << " at " << counter << " Unknown parent: " << parentName << std::endl;
+					std::cout << "WARNING! " << fileName << " at " << counter << " Unknown Error" << std::endl;
 				}
 			}
-            */
+            
 		}
 	}
 
