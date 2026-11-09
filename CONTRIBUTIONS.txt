@@ -1,3 +1,6 @@
 Evan Christensen:
     -Owned: Campus.cpp/Campus.h
     -Shared: main.cpp 
+
+Eddie Najera:
+    -Owned: Facility.h/Facility.cpp, FacilityHashTable.h/FacilityHashTable.cpp
