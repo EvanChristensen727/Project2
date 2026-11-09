@@ -1,0 +1,24 @@
+# 10.1 File Loading
+1) The Campus.cpp, FacilityHashTable.cpp, and DepartmentTree.cpp loaders accept valid records, reports blank lines, ignores comment lines, and reports lines with too many fields
+
+2) Missing files will make the Campus.cpp, FacilityHashTable.cpp, and DepartmentTree.cpp loaders consider them blank and continue to run smoothly
+
+3) Duplicate buildings with different cases are treated as duplicates, and duplicate facilities with different cases are dupes as well.
+
+4) Unknown references to buildings and facilities are treated gracefully in Campus.cpp and FacilityHashTable.cpp without crashing, and reversed connections are still seen as duplicates.
+
+#10.2
+1) The program gracefully handles lower-case, invalid-format, and not-found searches, and valid searches are correct
+
+2) The program correctly handles collisions and can search for collided keys correctly
+
+#10.3
+1) A BFS with an Unknown start prints a message saying that the start is unknown and does not run the BFS. An isolated building returns only itself as
+reachable. A fully connected graph returns all buildings (as well as distance)
+
+#10.4
+1) When adding a node to an empty tree, it does not prompt for a parent node. A root only tree works the same as a normal tree. Searching works for both 
+root and non root nodes. Searching for a missing department does not crash. Duplicate departments are not added. Preorder traversal functions as intended.
+
+2) Upon receiving an unknown command, the menu simply resets while printing a message saying that the request was unknown. Invalid names are handled gracefully
+for Campus and department commands.
