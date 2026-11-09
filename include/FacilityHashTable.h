@@ -15,7 +15,7 @@
         public:
             FacilityHashTable();
             int HashFunc(string s);             // hash function for input string
-            bool DataInTable(string f, bool c); // f is facID to search for, c is if collisions are to be counted
+            bool DataInTable(string f, bool c, bool m); // f is facID to search for, c is if collisions are to be counted, m controls if messages should be printed
             void AddData(Facility d);           // d is data to add
             void PrintTable();                  // more of a "verify it worked" thing rn
         private:

@@ -8,6 +8,11 @@ FacilityHashTable::FacilityHashTable()
 
 int FacilityHashTable::HashFunc(string s) //done
 {
+    //length check at start to ensure no index OoB
+    if ((s.length() != 4) || (toupper(s.at(0)) != 'F') || !isdigit(s.at(1)) || !isdigit(s.at(2)) || !isdigit(s.at(3)))
+    {
+        return -1;
+    }
     //get value to hash
     int val = toupper(s.at(0));
     val += stoi(s.substr(1,3));
@@ -16,14 +21,24 @@ int FacilityHashTable::HashFunc(string s) //done
     return index;
 }
 
-bool FacilityHashTable::DataInTable(string f, bool c) //done
+bool FacilityHashTable::DataInTable(string f, bool c, bool m) //done
 {
     //straight up reused code from an old AddData cut down.
     int index = HashFunc(f); 
     bool equal;
 
+    if (index = -1)
+    {
+        cout << "Invalid Facility ID" << endl;
+        return false;
+    }
+    
     if ( table.at(index).empty() )
     {
+        if (m)
+        {
+            cout << "ID Not Found" << endl;
+        }
         return false; //end here
     }
 
@@ -48,9 +63,17 @@ bool FacilityHashTable::DataInTable(string f, bool c) //done
             }
             if (equal)
             {
+                if (m)
+                {
+                    cout << "ID Found" << endl;
+                }
                 return true;
             }
         }
+    }
+    if (m)
+    {
+        cout << "ID Not Found" << endl;
     }
     return false;
 }
@@ -59,7 +82,7 @@ void FacilityHashTable::AddData(Facility d) //done
 {
     int index = HashFunc(d.GetFacilityID);
     bool equal;
-    if (!DataInTable(d.GetFacilityID, true)) //if the data is not in the table (count collisions), then add it
+    if (!DataInTable(d.GetFacilityID, true, false)) //if the data is not in the table (count collisions), then add it
     {
         table.at(index).push_back(d);
         cout << "\"" << d.GetFacilityID << "\" added to hash table at index " << index << endl;
