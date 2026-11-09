@@ -50,12 +50,12 @@ bool FacilityHashTable::DataInTable(string f, bool c, bool m) //done
             collisions++;
         }
         
-        if (*it.GetFacilityID.length() == f.length()) //save some time doing comparisons
+        if (*it.GetFacilityID().length() == f.length()) //save some time doing comparisons
         {
             equal = true;
-            for (int i = 0; i < *it.GetFacilityID.length(); i++)
+            for (int i = 0; i < *it.GetFacilityID().length(); i++)
             {
-                if (toupper(*it.GetFacilityID[i]) != toupper(d[i]))
+                if (toupper(*it.GetFacilityID()[i]) != toupper(f[i]))
                 {
                     equal = false;
                     break; //saves more time on comparisons
@@ -80,15 +80,15 @@ bool FacilityHashTable::DataInTable(string f, bool c, bool m) //done
 
 void FacilityHashTable::AddData(Facility d) //done
 {
-    int index = HashFunc(d.GetFacilityID);
+    int index = HashFunc(d.GetFacilityID());
     bool equal;
-    if (!DataInTable(d.GetFacilityID, true, false)) //if the data is not in the table (count collisions), then add it
+    if (!DataInTable(d.GetFacilityID(), true, false)) //if the data is not in the table (count collisions), then add it
     {
         table.at(index).push_back(d);
-        cout << "\"" << d.GetFacilityID << "\" added to hash table at index " << index << endl;
+        cout << "\"" << d.GetFacilityID() << "\" added to hash table at index " << index << endl;
         return; //end here
     }
-    cout << "ERROR: " << d.GetFacilityID << " already exists in this hash table." << endl;
+    cout << "ERROR: " << d.GetFacilityID() << " already exists in this hash table." << endl;
     return;
 }
 
@@ -103,7 +103,7 @@ void FacilityHashTable::PrintTable() //done
         }
         else
         {
-            for (list<Facility>::iterator it = table.at(index).begin(); it != table.at(index).end(); it++)
+            for (list<Facility>::iterator it = table.at(i).begin(); it != table.at(i).end(); it++)
                 cout << "\t" << *it.Print() << endl;
         }
         cout << endl;
