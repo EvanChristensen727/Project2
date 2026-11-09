@@ -44,20 +44,28 @@ std::string Campus::lowercase(std::string upper){
 }
 
 //Loads buildings.txt from the folder "path" into the buildings list, filtering out any incorrect lines
+//MUST BE LOADED BEFORE loadConnections()!!!
 bool Campus::loadBuildings(std::string path){
     int rej = 0;
     path += "buildings.txt";
     std::ifstream input(path);
 
     if (!input.is_open()){
-        std::cout << "File " << path << " cannot be opened";
+        std::cout << "File " << path << " cannot be opened" << std::endl;
         return false;
     }
 
     std::string line;
     std::getline(input, line);
-    int i = 1;
+    int i = 0;
     while (std::getline(input, line)){
+        i++;
+        //Ignore empty lines
+        if (line.size() == 0){
+            std::cout << "Line " << i << " of file " << path << " is empty" << std::endl;
+            rej++;
+            continue;
+        }
         //Ignore comments in the data files
         if (line.at(0) == '#'){
             rej++;
@@ -67,22 +75,21 @@ bool Campus::loadBuildings(std::string path){
         line = trimName(line);
 
         //Ignore duplicates
-        if (find(buildings.begin(), buildings.end(), line) != buildings.end()){
+        std::list<std::string> plain;
+        for (std::string x : buildings){
+            plain.push_back(lowercase(x));
+        }
+        if (find(plain.begin(), plain.end(), lowercase(line)) != plain.end()){
             std::cout << "Line " << i << " of file " << path << " is a duplicate" << std::endl;
             rej++;
             continue;
         }
 
-        //Ignore empty lines
-        if (line.empty()){
-            std::cout << "Line " << i << " of file " << path << " is empty" << std::endl;
-            rej++;
-            continue;
-        }
+        
 
         connections[line];
         buildings.push_back(line);
-        i++;
+        
     }
 
     input.close();
@@ -97,13 +104,25 @@ bool Campus::loadConnections(std::string path){
     std::ifstream input(path);
     int rej = 0;
     if (!input.is_open()){
-        std::cout << "File " << path << " cannot be opened";
+        std::cout << "File " << path << " cannot be opened" << std::endl;
         return false;
     }
-
-    int lineNum = 1;
+    if (buildings.size() == 0){
+        std::cout << "Becuse buildings have not been loaded, connections will not attempt to load" << std::endl;
+        return false;
+    }
+    
+    int lineNum = 0;
     std::string line;
     while (std::getline(input, line)){
+        lineNum += 1;
+        
+        //Ignore empty lines
+        if (line.size() == 0){
+            std::cout << "Line " << lineNum << " of file " << path << " is empty" << std::endl;
+            rej++;
+            continue;
+        }
 
         //Ignore comments in the data files
         if (line.at(0) == '#'){
@@ -118,12 +137,12 @@ bool Campus::loadConnections(std::string path){
                 i++;
                 continue;
             }
-
-            data[i] += c;
+            
             if (i > 1){
                 overflew = true;
                 break;
             }
+            data[i] += c;
         }
 
         //ignore too many arguments
@@ -151,19 +170,14 @@ bool Campus::loadConnections(std::string path){
             continue;
         }
 
-        //Ignore empty lines
-        if (line.empty()){
-            std::cout << "Line " << lineNum << " of file " << path << " is empty" << std::endl;
-            rej++;
-            continue;
-        }
+        
 
         
         connections[data[1]].push_back(data[0]);
         connections[data[0]].push_back(data[1]);
         paths += 1;
 
-        lineNum += 1;
+        
     }
 
     input.close();
@@ -175,6 +189,7 @@ bool Campus::loadConnections(std::string path){
 void Campus::printAdjacencyList(){
     if (buildings.size() == 0){
         std::cout << "There are no buildings" << std::endl;
+        return;
     }
     for (std::string x : buildings){
         std::cout << "-" << x << ":" << std::endl;
@@ -189,11 +204,19 @@ void Campus::printAdjacencyList(){
 
 //Returns the out-degree of input
 int Campus::getDegree(std::string building){
+    if (buildings.size() == 0){
+        std::cout << "There are no buildings" << std::endl;
+        return 0;
+    }
     return connections.at(building).size();
 }
 
 //Prints the out-degree of each building
 void Campus::printDegrees(){
+    if (buildings.size() == 0){
+        std::cout << "There are no buildings" << std::endl;
+        return;
+    }
     for (std::string x : buildings){
         std::cout << "-" << x << ": " << getDegree(x) << std::endl;
     }
@@ -206,6 +229,10 @@ int Campus::getPaths(){
 
 //Prints the name of each building in buildings
 void Campus::printBuildings(){
+    if (buildings.size() == 0){
+        std::cout << "There are no buildings" << std::endl;
+        return;
+    }
     for (std::string x : buildings){
         std::cout << "-" << x << std::endl;
     }
@@ -214,6 +241,10 @@ void Campus::printBuildings(){
 //Runs a Breadth First Search from the input, printing out every reachable building and its distance form the input, as well as the input (at distance 0)
 //Will cancel if the input does not match any element in buildings (case-insensitive, whitespace trimmed)
 void Campus::printWalkability(std::string building){
+    if (buildings.size() == 0){
+        std::cout << "There are no buildings" << std::endl;
+        return;
+    }
     std::unordered_map<std::string, std::pair<int, bool>> buildings2;
     std::string trimmedBuilding = lowercase(trimName(building));
     bool known = false;

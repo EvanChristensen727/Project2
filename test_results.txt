@@ -1,0 +1,17 @@
+# 10.1 File Loading
+1) The Campus.cpp loader accepts valid records, reports blank lines, ignores comment lines, and reports lines with too many fields
+
+2) Missing files will make the Campus.cpp loader consider them blank and continue to run smoothly
+
+3) Duplicate buildings with different spellings are treated as duplicates.
+
+4) Unknown references to buildings are treated gracefully in Campus.cpp without crashing, and reversed connections are still seen as duplicates.
+
+#10.3
+1) A BFS with an Unknown start prints a message saying that the start is unknown and does not run the BFS. An isolated building returns only itself as
+reachable. A fully connected graph returns all buildings (as well as distance)
+
+#10.4
+1) 
+
+2) Upon receiving an unknown command, the menu simply resets while printing a message saying that the request was unknown.

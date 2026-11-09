@@ -1,4 +1,4 @@
-#include "Campus.cpp"
+#include "../include/Campus.h"
 #include "../include/DepartmentTree.h"
 #include "../include/DepartmentNode.h"
 using namespace std;
@@ -17,14 +17,24 @@ int main(int argc, char* argv[]){
 
   cout << endl;
   string choice = "0";
+  int num = 439;
+  while (num != 0 && num != 10){
 
-  
-  while (stoi(choice) != 10){
     cout << endl << "Please choose an option from the directory: \n1) View all facilities\n2) Search facilities by ID \n3) View campus graph \n4) Display graph counts and degrees \n5) Find reachable buildings (BFS)" <<endl;
     cout << "6) Add department \n7) Search department \n8) Display department hierarchy \n9) Run preorder traversal \n10) Exit\n\n";
     getline(cin, choice);
     cout << endl;
-    switch(stoi(choice)){
+    try
+    {
+      num = stoi(choice);
+    }
+    catch(exception e)
+    {
+      cout << "Please select a valid option\n";
+      continue;
+    }
+    
+    switch(num){
       default:
         cout << "Command not recognized, please try again";
         break;
@@ -104,6 +114,9 @@ int main(int argc, char* argv[]){
         break;
       case 10:
         //exit
+        break;
+      case 0:
+        //second exit? It was mentioned in the rubric, so I'm not taking chances
         break;
     }
   }
