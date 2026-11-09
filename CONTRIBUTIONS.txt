@@ -4,3 +4,7 @@ Evan Christensen:
 
 Eddie Najera:
     -Owned: Facility.h/Facility.cpp, FacilityHashTable.h/FacilityHashTable.cpp
+
+Blair Rush:
+    -Owned DepartmentTree.h/DepartmentName.cpp, DepartmentTree.h/DepartmentTree.cpp
+    -Shared main.cpp

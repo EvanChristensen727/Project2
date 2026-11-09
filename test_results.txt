@@ -1,7 +1,7 @@
 # 10.1 File Loading
-1) The Campus.cpp loader accepts valid records, reports blank lines, ignores comment lines, and reports lines with too many fields
+1) The Campus.cpp and DepartmentTree.cpp loaders accept valid records, reports blank lines, ignores comment lines, and reports lines with too many fields
 
-2) Missing files will make the Campus.cpp loader consider them blank and continue to run smoothly
+2) Missing files will make the Campus.cpp and DepartmentTree.cpp loaders consider them blank and continue to run smoothly
 
 3) Duplicate buildings with different spellings are treated as duplicates.
 
@@ -12,6 +12,8 @@
 reachable. A fully connected graph returns all buildings (as well as distance)
 
 #10.4
-1) 
+1) When adding a node to an empty tree, it does not prompt for a parent node. A root only tree works the same as a normal tree. Searching works for both 
+root and non root nodes. Searching for a missing department does not crash. Duplicate departments are not added. Preorder traversal functions as intended.
 
-2) Upon receiving an unknown command, the menu simply resets while printing a message saying that the request was unknown.
+2) Upon receiving an unknown command, the menu simply resets while printing a message saying that the request was unknown. Invalid names are handled gracefully
+for Campus and department commands.
