@@ -47,11 +47,13 @@ int main(int argc, char* argv[]){
         break;
       case 2:
         //Search facilities by ID
+        {
         string fId;
-        cout << "Enter facility ID (F followed by 3 numbers):"
+        cout << "Enter facility ID (F followed by 3 numbers):";
         getline(cin, fID);
         facilities.DataInTable(fId, false, true);
         break;
+        }
       case 3:
         //View Campus Graph
         campus_map.printAdjacencyList();

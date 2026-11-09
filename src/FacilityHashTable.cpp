@@ -220,7 +220,7 @@ bool FacilityHashTable::LoadFacilities(string fileName)
 			}
 			if(!DataInTable(f, false, false))
             {
-                Facilty fac(f,n,b,c);
+                Facility fac(f,n,b,c);
                 AddData(fac);
 				accepted++;
 			}
