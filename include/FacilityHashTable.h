@@ -1,89 +1,27 @@
-#include "FacilityHashTable.h"
+#ifndef FACILITY_HASHTABLE_H
+#define FACILITY_HASHTABLE_H
 
-FacilityHashTable::FacilityHashTable()
-{
-    table.resize(HASHTABLE_SIZE);
-    collisions = 0;
-}
+    #include <iostream>
+    #include <vector>
+    #include <list>
+    #include "Facility.h"
+    #include <cctype>
 
-int FacilityHashTable::HashFunc(string s) //done
-{
-    //get value to hash
-    int val = toupper(s.at(0));
-    val += stoi(s.substr(1,3));
-    //hash it
-    int index = val % HASHTABLE_SIZE;
-    return index;
-}
+    const int HASHTABLE_SIZE = 50;
+    using namespace std;
 
-bool FacilityHashTable::DataInTable(string f, bool c) //done
-{
-    //straight up reused code from an old AddData cut down.
-    int index = HashFunc(f); 
-    bool equal;
-
-    if ( table.at(index).empty() )
+    class FacilityHashTable
     {
-        return false; //end here
-    }
+        public:
+            FacilityHashTable();
+            int HashFunc(string s);             // hash function for input string
+            bool DataInTable(string f, bool c); // f is facID to search for, c is if collisions are to be counted
+            void AddData(Facility d);           // d is data to add
+            void PrintTable();                  // more of a "verify it worked" thing rn
+        private:
+            vector<list<Facility>> table;
+            int collisions;
+    };
 
-    
-    for (list<Facility>::iterator it = table.at(index).begin(); it != table.at(index).end(); it++)
-    {
-        if (c)
-        {
-            collisions++;
-        }
-        
-        if (*it.GetFacilityID.length() == f.length()) //save some time doing comparisons
-        {
-            equal = true;
-            for (int i = 0; i < *it.GetFacilityID.length(); i++)
-            {
-                if (toupper(*it.GetFacilityID[i]) != toupper(d[i]))
-                {
-                    equal = false;
-                    break; //saves more time on comparisons
-                }
-            }
-            if (equal)
-            {
-                return true;
-            }
-        }
-    }
-    return false;
-}
 
-void FacilityHashTable::AddData(Facility d) //done
-{
-    int index = HashFunc(d.GetFacilityID);
-    bool equal;
-    if (!DataInTable(d.GetFacilityID, true)) //if the data is not in the table (count collisions), then add it
-    {
-        table.at(index).push_back(d);
-        cout << "\"" << d.GetFacilityID << "\" added to hash table at index " << index << endl;
-        return; //end here
-    }
-    cout << "ERROR: " << d.GetFacilityID << " already exists in this hash table." << endl;
-    return;
-}
-
-void FacilityHashTable::PrintTable() //done
-{
-    for (int i = 0; i < HASHTABLE_SIZE; i++)
-    {   
-        cout << "Bucket " << i << ":\n"; 
-        if (table.at(i).empty())
-        {
-            cout << "\tEMPTY" << endl;
-        }
-        else
-        {
-            for (list<Facility>::iterator it = table.at(index).begin(); it != table.at(index).end(); it++)
-                cout << "\t" << *it.Print() << endl;
-        }
-        cout << endl;
-    }
-    cout << "Collisions: " << collisions << endl;
-}
+#endif
