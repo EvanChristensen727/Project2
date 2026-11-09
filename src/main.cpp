@@ -13,13 +13,23 @@ int main(int argc, char* argv[]){
   campus_map.loadConnections(dataPath);
   cout << endl;
   string choice = "0";
-  
-  while (stoi(choice) != 10){
+  int num = 439;
+  while (num != 0 && num != 10){
     cout << endl << "Please choose an option from the directory: \n1) View all facilities\n2) Search facilities by ID \n3) View campus graph \n4) Display graph counts and degrees \n5) Find reachable buildings (BFS)" <<endl;
     cout << "6) Add department \n7) Search department \n8) Display department hierarchy \n9) Run preorder traversal \n10) Exit\n\n";
     getline(cin, choice);
     cout << endl;
-    switch(stoi(choice)){
+    try
+    {
+      num = stoi(choice);
+    }
+    catch(exception e)
+    {
+      cout << "Please select a valid option\n";
+      continue;
+    }
+    
+    switch(num){
       default:
         cout << "Command not recognized, please try again";
         break;

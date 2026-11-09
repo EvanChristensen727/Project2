@@ -44,6 +44,7 @@ std::string Campus::lowercase(std::string upper){
 }
 
 //Loads buildings.txt from the folder "path" into the buildings list, filtering out any incorrect lines
+//MUST BE LOADED BEFORE loadConnections()!!!
 bool Campus::loadBuildings(std::string path){
     int rej = 0;
     path += "buildings.txt";
