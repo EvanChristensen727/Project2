@@ -118,11 +118,97 @@ void FacilityHashTable::PrintTable() //done
     cout << "Collisions: " << collisions << endl;
 }
 
-void FacilityHashTable::ReadFacilities(string fileName)
+bool FacilityHashTable::ReadFacilities(string fileName)
 {
-    ifstream inputFile;
+    ifstream inputFile; //reusing some stuff from a teammate, thank you Blair <3
 	string line;
-    int count = 0;
-    int accept = 0;
-    int reject = 0;
+    int counter = 0;
+    int accepted = 0;
+    int rejected = 0;
+
+    inputFile.open(fileName);
+
+    if(!inputFile.is_open())
+    {
+		cout << fileName << " failed to open!" << endl;
+		return false;
+	}
+
+    while(getline(inputFile, line))
+    {
+		string f, n, b, c; //facilityID, facility name, building, category
+		//line = Campus::trimName(line);
+		stringstream ss(line);
+		counter++;
+
+		if (line.empty() || line[0] == '#')
+        {
+			continue;
+		}
+		else
+        {
+			if(line.find('|') == std::string::npos)
+            {
+				std::cout << "WARNING! " << fileName << " at " << counter << " too few fields." <<std::endl;
+				rejected++;
+				continue;
+			}
+
+			getline(ss, f, '|');
+            getline(ss, n, '|');
+            getline(ss, b, '|');
+			getline(ss, s);
+			//departmentName = Campus::trimName(departmentName);
+			//parentName = Campus::trimName(parentName);
+            /*
+			if (departmentName.empty() || parentName.empty())
+            {
+				std::cout << "WARNING " << fileName << " at " << counter << " has empty fields." << std::endl;
+				rejected++;
+				continue;
+			}
+			if(parentName.find('|') != std::string::npos)
+            {
+				std::cout << "WARNING! " << fileName << " at " << counter << " contains too many fields." << std::endl;
+				rejected++;
+				continue;
+			}
+			if (root == nullptr)
+            {
+				if (lowerCase(parentName) != "none"){
+					std::cout << "WARNING: " << fileName <<" Root parent must be NONE at: " << counter << std::endl;
+					rejected++;
+					continue;
+				}
+			}
+			else if(lowerCase(parentName) == "none")
+            {
+				std::cout << "WARNING:" << fileName << " another root is not allowed at: " << counter << std::endl;
+				rejected++;
+				continue;
+			}
+			if(addDepartment(departmentName, parentName))
+            {
+				accepted++;
+			}
+			else
+            {
+				rejected++;
+				if (SearchTree(departmentName))
+                {
+					std::cout << "Warning! " << fileName << " at " << counter << " duplicate department" << std::endl;
+				}
+				else
+                {
+					std::cout << "Warning! " << fileName << " at " << counter << " Unknown parent: " << parentName << std::endl;
+				}
+			}
+            */
+		}
+	}
+
+	cout << "Facilities loaded: " << accepted << endl;
+	cout << "Facilities rejected: " << rejected << endl;
+
+	return true;
 }
