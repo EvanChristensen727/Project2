@@ -23,8 +23,9 @@ int main(int argc, char* argv[]){
   int num = 439;
   while (num != 0 && num != 18){
 
-    cout << endl << "Please choose an option from the directory: \n1) View all facilities\n2) Search facilities by ID \n3) View campus graph \n4) Display graph counts and degrees \n5) Find reachable buildings (BFS)" <<endl;
-    cout << "6) Add department \n7) Search department \n8) Display department hierarchy \n9) Run preorder traversal \n10) Exit\n\n";
+    cout << endl << "Please choose an option from the directory: \n1) View all facilities\n2) Search facility by ID \n3) Search facility by name \n4) Search facility by category \n5) View campus graph \n6) Display graph counts and degrees" << endl;
+    cout << "7) Find reachable buildings (BFS) \n8) Find shortest path (BFS) \n9) Add department \n10) Search Department \n11) Display department hierarchy \n12) Preorder traversal \n";
+    cout << "13) Postorder traversal \n14) Level-order traversal \n15) Department statistics \n16) Facility category report \n17) Graph connectivity report \n18) Exit\n";
     getline(cin, choice);
     cout << endl;
     try
@@ -82,6 +83,17 @@ int main(int argc, char* argv[]){
         break;
       case 8:
         //Find shortest path (BFS)
+        {
+          string start, end;
+          cout << "Enter the starting building: ";
+          getline(cin, start);
+          cout << "Enter the destination building: ";
+          getline(cin, end);
+          cout << endl;
+          campus_map.printShortestPath(start, end);
+
+        }  
+        break;
       case 9:{
 		string departmentName, parentName;
 		
@@ -143,6 +155,7 @@ int main(int argc, char* argv[]){
         break;
       case 17:
         //Graph connectivity report
+        campus_map.printConnectivityReport();
         break;
       case 18:
         //exit

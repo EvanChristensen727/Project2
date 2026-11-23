@@ -1,5 +1,8 @@
 #include "../include/Campus.h"
 
+Campus::Campus(){
+    paths = 0;
+}
 
 //Removes whitespace from the beginning and end of a string
 std::string Campus::trimName(std::string name){
@@ -303,4 +306,129 @@ std::list<std::string> Campus::copyBuildings(){
         copy.push_back(x);
     }
     return copy;
+}
+
+void Campus::printShortestPath(std::string start, std::string end){
+    std::string trimmedStart = lowercase(trimName(start));
+    std::string trimmedEnd = lowercase(trimName(end));
+    if ((buildings.size() == 1 && trimmedStart != trimmedEnd) || buildings.size() == 0){
+        std::cout << "There are not enough buildings to run this BFS search" << std::endl;
+        return;
+    }
+    std::unordered_map<std::string, std::pair<int, std::string>> buildings2;
+    
+    bool knownStart, knownEnd = false;
+    std::string recognizedStart, recognizedEnd;
+    for (std::string i : buildings){
+        if (lowercase(i) == trimmedStart){
+            buildings2[i] = {0, i};
+            knownStart = true;
+            recognizedStart = i;
+            continue;
+        }
+        if (lowercase(i) == trimmedEnd){
+            buildings2[i] = {-1, ""};
+            knownEnd = true;
+            recognizedEnd = i;
+            continue;
+        }
+        buildings2[i] = {-1, ""};
+    }
+
+    if (!knownEnd || !knownStart){
+        if (!knownStart){
+            std::cout << "Starting building not recognized" << std::endl;
+        }
+        if (!knownEnd){
+            std::cout << "Destination building not recognized" << std::endl;
+        }
+        return;
+    }
+
+    int distance = 0;
+    std::queue<std::string> q;
+    q.push(recognizedStart);
+
+    while (!q.empty()){
+        std::queue<std::string> tracking = q;
+        q = std::queue<std::string>();
+
+        while (!tracking.empty()){
+            std::string i = tracking.front();
+            for (std::string adj : connections.at(i)){
+                if (buildings2.at(adj).first == -1){
+                    q.push(adj);
+                    buildings2.at(adj) = {distance + 1, i};
+                }
+            }
+            tracking.pop();
+        }
+        distance++;
+    }
+
+    if (buildings2[recognizedEnd].first != -1){
+        std::string prev = buildings2[recognizedEnd].second;
+        std::stack<std::string> path;
+        path.push(recognizedEnd);
+        while (prev != recognizedStart){
+            path.push(prev);
+            prev = buildings2[prev].second;
+        }
+        path.push(recognizedStart);
+        std::cout << "The shortest path from \"" << start << "\" to \"" << end << "\" has a distance of " << buildings2[recognizedEnd].first << " and can be traced by the following traversals:" << std::endl;
+        while (path.size() != 1){
+            std::cout << path.top() << " -> ";
+            path.pop();
+            std::cout << path.top() << std::endl;
+        }
+    }else{
+        std::cout << "\"" << start << "\" is not connected to \"" << end << "\", no path exists" << std::endl;
+        return;
+    }
+
+
+}
+
+
+void Campus::printConnectivityReport(){
+    if (buildings.size() == 0){
+        std::cout << "There are no buildings" << std::endl;
+        return;
+    }
+    std::cout << "Buildings: " << std::endl;
+    printBuildings();
+    std::cout << std::endl << "Paths: " << paths << std::endl << std::endl;
+    int max = 0;
+    std::list<std::string> highest;
+    std::list<std::string> unconnected;
+    for (std::string i : buildings){
+        if (connections.at(i).size() == max){
+            highest.push_back(i);
+        }
+        if (connections.at(i).size() > max){
+            max = connections.at(i).size();
+            highest = std::list<std::string>();
+            highest.push_back(i);
+        }
+        if (connections.at(i).size() == 0){
+            unconnected.push_back(i);
+        }
+    }
+    std::cout << "The building(s) with the highest degree (" << max << ") is/are:" << std::endl;
+    for (std::string i : highest){
+        std::cout << "  -" << i << std::endl;
+    }
+    std::cout << std::endl;
+    if (unconnected.size() == 0){
+        std::cout << "There are no unconnected buildings" << std::endl;
+    }
+    else{
+        std::cout << "The unconnected building(s) is/are:" << std::endl;
+        for (std::string i : unconnected){
+            std::cout << "  -" << i << std::endl;
+        }
+    }
+
+
+   
 }

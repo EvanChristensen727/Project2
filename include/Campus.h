@@ -9,6 +9,7 @@
 #include <iostream>
 #include <queue>
 #include <algorithm>
+#include <stack>
 
 class Campus{
     public:
@@ -20,9 +21,14 @@ class Campus{
         int getPaths();
         void printBuildings();
         void printWalkability(std::string building);
+        void printShortestPath(std::string start, std::string end);
+        void printConnectivityReport();
+        int componentCount();
         static std::string trimName(std::string name);
         std::string lowercase(std::string upper);
         std::list<std::string> copyBuildings();
+        Campus();
+        
 
     private:
         int paths;
