@@ -21,7 +21,7 @@ int main(int argc, char* argv[]){
   cout << endl;
   string choice = "0";
   int num = 439;
-  while (num != 0 && num != 10){
+  while (num != 0 && num != 18){
 
     cout << endl << "Please choose an option from the directory: \n1) View all facilities\n2) Search facilities by ID \n3) View campus graph \n4) Display graph counts and degrees \n5) Find reachable buildings (BFS)" <<endl;
     cout << "6) Add department \n7) Search department \n8) Display department hierarchy \n9) Run preorder traversal \n10) Exit\n\n";
@@ -55,17 +55,22 @@ int main(int argc, char* argv[]){
         }
         break;
       case 3:
+        //Search Facility by name
+        break;
+      case 4:
+        //Search facility by category
+      case 5:
         //View Campus Graph
         campus_map.printAdjacencyList();
         break;
-      case 4:
+      case 6:
         //Display graph counts and degrees
         cout << "Number of paths: " << campus_map.getPaths() << endl;
         cout << "Number of buildings: " << campus_map.copyBuildings().size() << endl;
         cout << "Degrees: " << endl;
         campus_map.printDegrees();
         break;
-      case 5:
+      case 7:
         //Find Reachable buildings (BFS)
         {
           string building;
@@ -75,7 +80,9 @@ int main(int argc, char* argv[]){
 
         }  
         break;
-      case 6:{
+      case 8:
+        //Find shortest path (BFS)
+      case 9:{
 		string departmentName, parentName;
 		
 		cout << "Enter department name: ";
@@ -98,7 +105,7 @@ int main(int argc, char* argv[]){
 	}
         //Add department
         break;
-      case 7:{
+      case 10:{
 		string departmentName;
 		cout << "Enter department name to search: ";
 		getline(cin, departmentName);
@@ -114,15 +121,30 @@ int main(int argc, char* argv[]){
 	     }
         //Search department
         break;
-      case 8:
+      case 11:
 	department.displayHierarchy();
         //Display department Hierarchy
         break;
-      case 9:
+      case 12:
         //Run preorder traversal
 	department.preorderTraversal();
         break;
-      case 10:
+      case 13:
+       //Run postorder traversal
+        break;
+      case 14:
+        //Level order traversal
+        break;
+      case 15:
+        //Department Statistics
+        break;
+      case 16:
+        //Facility Category Report
+        break;
+      case 17:
+        //Graph connectivity report
+        break;
+      case 18:
         //exit
         break;
       case 0:
