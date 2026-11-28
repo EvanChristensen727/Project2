@@ -8,7 +8,7 @@ int main(int argc, char* argv[]){
   DepartmentTree department;
   FacilityHashTable facilities;
   //Logic for handling the command line argument for the data path
-  string dataPath = "../data/";
+  string dataPath = "./data/";
   if (argc > 1){
     dataPath = argv[1];
   }
