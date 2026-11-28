@@ -112,8 +112,8 @@ void FacilityHashTable::PrintTable() //done
             {
                 (*it).Print();
             }
+            cout << endl;
         }
-        cout << endl;
     }
     //cout << "Collisions: " << collisions << endl;
 }

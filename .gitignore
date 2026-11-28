@@ -1,4 +1,5 @@
 .vscode/
 *.exe
+*.out
 test_data/
 *.bat
