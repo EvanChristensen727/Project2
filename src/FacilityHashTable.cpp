@@ -89,6 +89,11 @@ void FacilityHashTable::AddData(Facility d) //done
     bool equal;
     if (!DataInTable(d.GetFacilityID(), true, false) && index != -1) //if the data is not in the table (count collisions), then add it
     {
+        if (!CheckBuildings(d.GetBuildingName()))
+        {
+            cout << "ERROR: " << d.GetBuildingName() << " is not a real building." << endl;
+            return;
+        }
         table.at(index).push_back(d);
         cout << "\"" << d.GetFacilityID() << "\" added to hash table at index " << index << endl;
         return; //end here
@@ -218,6 +223,12 @@ bool FacilityHashTable::LoadFacilities(string fileName)
                 rejected++;
 				continue;
 			}
+            if (!CheckBuildings(b)) //if building is not there
+            {
+                cout << "WARNING! " << fileName << " at " << counter << " has invalid Building." << endl;
+                rejected++;
+				continue;
+            }
 			if(!DataInTable(f, false, false))
             {
                 Facility fac(f,n,b,c);
@@ -245,3 +256,33 @@ bool FacilityHashTable::LoadFacilities(string fileName)
 
 	return true;
 }
+
+bool FacilityHashTable::CheckBuildings(string bld)
+{
+    bool equal = true;
+    for (list<string>::iterator it = buildings.begin(); it != buildings.end(); it++)
+    {
+        if ((*it).length() == bld.length()) //save some time doing comparisons
+        {
+            equal = true;
+            for (int i = 0; i < (*it).length(); i++)
+            {
+                if (toupper((*it)[i]) != toupper(bld[i]))
+                {
+                    equal = false;
+                    break; //saves more time on comparisons
+                }
+            }
+            if (equal)
+            {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+void FacilityHashTable::LoadBuildings(list<string> l) //relatively simple, hard work is done for me
+{
+    buildings = l;
+} 

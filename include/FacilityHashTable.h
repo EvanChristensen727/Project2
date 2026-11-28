@@ -20,9 +20,12 @@
             void PrintTable();                          // more of a "verify it worked" thing rn
             string StrTrim(string name);                // function taken from campus to make ReadFacilities easier
             bool LoadFacilities(string fileName);       // read facilities into hashmap from file
+            bool CheckBuildings(string bld);            // check if building exists
+            void LoadBuildings(list<string> l);         // read buildings from a pre-existing list of strings
         private:
             vector<list<Facility>> table;
             int collisions;
+            list<string> buildings;                     // list of buildings taken from Campus, makes sure that building actually exists.
     };
 
 

@@ -16,6 +16,7 @@ int main(int argc, char* argv[]){
   campus_map.loadBuildings(dataPath);
   campus_map.loadConnections(dataPath);
   department.loadDepartment(dataPath + "departments.txt");
+  facilities.LoadBuildings(campus_map.copyBuildings()); //take the buildings that have been loaded in from line 16 <3
   facilities.LoadFacilities(dataPath + "facilities.txt");
 
   cout << endl;
