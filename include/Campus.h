@@ -27,6 +27,7 @@ class Campus{
         static std::string trimName(std::string name);
         std::string lowercase(std::string upper);
         std::list<std::string> copyBuildings();
+        static std::list<std::string> lineSplit(std::string initial);
         Campus();
         
 

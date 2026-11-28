@@ -4,11 +4,38 @@ Campus::Campus(){
     paths = 0;
 }
 
+std::list<std::string> Campus::lineSplit(std::string initial){
+    std::list<std::string> returned;
+    std::string buffer; 
+    bool flag = false;
+    for (char c : initial){
+        if (c == '\\'){
+            flag = true;
+            continue;
+        }
+        if (flag){
+            flag = false;
+            if (c=='r'){
+                returned.push_back(buffer);
+                buffer = "";
+                continue;
+            }
+            buffer += '\\';
+        }
+        buffer += c;
+        
+    }
+
+    if (buffer != ""){
+        returned.push_back(buffer);
+    }
+    return returned;
+}
+
 //Removes whitespace from the beginning and end of a string
 std::string Campus::trimName(std::string name){
     std::string halfTrim = "";
     std::string fullTrim = "";
-    std::string finalTrim = "";
     //starting trim
     bool start = false;
     for (char c : name){
@@ -33,25 +60,9 @@ std::string Campus::trimName(std::string name){
             heldSpace = "";
         }
     }
-    bool flag = false;
-    for (char c : fullTrim){
-        if (c == '\\'){
-            flag = true;
-            continue;
-        }
-        if (flag){
-            flag = false;
-            if (c=='r'){
-                std::cout << "BREAKING NEWS";
-                break;
-            }
-            finalTrim += '\\';
-        }
-        std::cout << c << std::endl;
-        finalTrim += c;
-    }
+    
 
-    return finalTrim;
+    return fullTrim;
     
 }
 
@@ -94,21 +105,24 @@ bool Campus::loadBuildings(std::string path){
         }
 
         line = trimName(line);
-
-        //Ignore duplicates
-        std::list<std::string> plain;
-        for (std::string x : buildings){
-            plain.push_back(lowercase(x));
-        }
-        if (find(plain.begin(), plain.end(), lowercase(line)) != plain.end()){
-            std::cout << "Line " << i << " of file " << path << " is a duplicate" << std::endl;
-            rej++;
-            continue;
-        }
+        std::list<std::string> lines = lineSplit(line);
+        for (std::string cur : lines){
+            //Ignore duplicates
+            std::list<std::string> plain;
+            for (std::string x : buildings){
+                plain.push_back(lowercase(x));
+            }
+            if (find(plain.begin(), plain.end(), lowercase(cur)) != plain.end()){
+                std::cout << "Line " << i << " of file " << path << " is a duplicate" << std::endl;
+                rej++;
+                continue;
+            }
 
         
-        connections[line];
-        buildings.push_back(line);
+            connections[cur];
+            buildings.push_back(cur);
+        }
+        
         
     }
 
@@ -136,7 +150,6 @@ bool Campus::loadConnections(std::string path){
     std::string line;
     while (std::getline(input, line)){
         lineNum += 1;
-        
         //Ignore empty lines
         if (line.size() == 0){
             std::cout << "Line " << lineNum << " of file " << path << " is empty" << std::endl;
@@ -148,59 +161,61 @@ bool Campus::loadConnections(std::string path){
         if (line.at(0) == '#'){
             continue;
         }
+        std::list<std::string> lines = lineSplit(line);
+        for (std::string cur : lines){
+            int i = 0;
+            std::string data[2];
+            bool overflew = false;
+            for (char c : cur){
+                if (c == '|'){
+                    i++;
+                    continue;
+                }
 
-        int i = 0;
-        std::string data[2];
-        bool overflew = false;
-        for (char c : line){
-            if (c == '|'){
-                i++;
+                if (i > 1){
+                    overflew = true;
+                    break;
+                }
+                data[i] += c;
+            }
+
+            //ignore too many arguments
+            if (overflew){
+                std::cout << "Line " << lineNum << " of file " << path << " has too many arguments" << std::endl;
+                rej++;
+                continue;
+            
+            }
+
+            data[0] = trimName(data[0]);
+            data[1] = trimName(data[1]);
+            if (data[0] == data[1]){
+                std::cout << "Line " << lineNum << " of file " << path << " is a self connection" << std::endl;
+                rej++;
+                continue;
+            }
+            //ignore undefined buildings
+            if (find(buildings.begin(), buildings.end(), data[1]) == buildings.end() || find(buildings.begin(), buildings.end(), data[0]) == buildings.end()){
+                std::cout << "Line " << lineNum << " of file " << path << " has an argument which has not yet been loaded" << std::endl;
+                rej++;
+                continue;
+            }
+            //Ignore duplicates
+            if (find(connections.at(data[0]).begin(), connections.at(data[0]).end(), data[1]) != connections.at(data[0]).end()){
+                std::cout << "Line " << lineNum << " of file " << path << " is a duplicate" << std::endl;
+                rej++;
                 continue;
             }
             
-            if (i > 1){
-                overflew = true;
-                break;
-            }
-            data[i] += c;
-        }
-
-        //ignore too many arguments
-        if (overflew){
-            std::cout << "Line " << lineNum << " of file " << path << " has too many arguments" << std::endl;
-            rej++;
-            continue;
             
-        }
-
-        data[0] = trimName(data[0]);
-        data[1] = trimName(data[1]);
-        if (data[0] == data[1]){
-            std::cout << "Line " << lineNum << " of file " << path << " is a self connection" << std::endl;
-            rej++;
-            continue;
-        }
-        //Ignore duplicates
-        if (find(connections.at(data[0]).begin(), connections.at(data[0]).end(), data[1]) != connections.at(data[0]).end()){
-            std::cout << "Line " << lineNum << " of file " << path << " is a duplicate" << std::endl;
-            rej++;
-            continue;
-        }
-
-        //ignore undefined buildings
-        if (find(buildings.begin(), buildings.end(), data[1]) == buildings.end() || find(buildings.begin(), buildings.end(), data[0]) == buildings.end()){
-            std::cout << "Line " << lineNum << " of file " << path << " has an argument which has not yet been loaded" << std::endl;
-            rej++;
-            continue;
-        }
 
         
 
         
-        connections[data[1]].push_back(data[0]);
-        connections[data[0]].push_back(data[1]);
-        paths += 1;
-
+            connections[data[1]].push_back(data[0]);
+            connections[data[0]].push_back(data[1]);
+            paths += 1;
+        }
         
     }
 
