@@ -7,6 +7,10 @@
 
 4) Unknown references to buildings and facilities are treated gracefully in Campus.cpp and FacilityHashTable.cpp without crashing, and reversed connections are still seen as duplicates.
 
+5) Empty files, self connections, and empty fields are treated gracefully in Campus.cpp
+
+6) Windows line endings, extra whitespace, and a # inside a name are treated gracefully in Campus.cpp
+
 #10.2
 1) The program gracefully handles lower-case, invalid-format, and not-found searches, and valid searches are correct
 
@@ -16,9 +20,18 @@
 1) A BFS with an Unknown start prints a message saying that the start is unknown and does not run the BFS. An isolated building returns only itself as
 reachable. A fully connected graph returns all buildings (as well as distance)
 
+2) A shortest path where the start equals the destination is returned as distance 0 without listing the path. Both an unknown start and an unknown end are
+both communicated, even at the same time. If there is no path between 2 buildings a clear message is printed
+
+3) In the case of 2 equally short routes, neighbor insertion order is preserved
+
 #10.4
 1) When adding a node to an empty tree, it does not prompt for a parent node. A root only tree works the same as a normal tree. Searching works for both 
 root and non root nodes. Searching for a missing department does not crash. Duplicate departments are not added. Preorder traversal functions as intended.
 
 2) Upon receiving an unknown command, the menu simply resets while printing a message saying that the request was unknown. Invalid names are handled gracefully
 for Campus and department commands.
+
+3)
+
+4) The connectivity report reports all buildings tied with the highest degree as well as any isolated buildings (buildings with a degree of 0)

@@ -23,7 +23,7 @@ class Campus{
         void printWalkability(std::string building);
         void printShortestPath(std::string start, std::string end);
         void printConnectivityReport();
-        int componentCount();
+        int componentCount(std::unordered_map<std::string, bool> current);
         static std::string trimName(std::string name);
         std::string lowercase(std::string upper);
         std::list<std::string> copyBuildings();

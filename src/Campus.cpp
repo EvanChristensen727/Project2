@@ -8,6 +8,7 @@ Campus::Campus(){
 std::string Campus::trimName(std::string name){
     std::string halfTrim = "";
     std::string fullTrim = "";
+    std::string finalTrim = "";
     //starting trim
     bool start = false;
     for (char c : name){
@@ -32,8 +33,25 @@ std::string Campus::trimName(std::string name){
             heldSpace = "";
         }
     }
-   
-    return fullTrim;
+    bool flag = false;
+    for (char c : fullTrim){
+        if (c == '\\'){
+            flag = true;
+            continue;
+        }
+        if (flag){
+            flag = false;
+            if (c=='r'){
+                std::cout << "BREAKING NEWS";
+                break;
+            }
+            finalTrim += '\\';
+        }
+        std::cout << c << std::endl;
+        finalTrim += c;
+    }
+
+    return finalTrim;
     
 }
 
@@ -89,7 +107,6 @@ bool Campus::loadBuildings(std::string path){
         }
 
         
-
         connections[line];
         buildings.push_back(line);
         
@@ -158,7 +175,11 @@ bool Campus::loadConnections(std::string path){
 
         data[0] = trimName(data[0]);
         data[1] = trimName(data[1]);
-
+        if (data[0] == data[1]){
+            std::cout << "Line " << lineNum << " of file " << path << " is a self connection" << std::endl;
+            rej++;
+            continue;
+        }
         //Ignore duplicates
         if (find(connections.at(data[0]).begin(), connections.at(data[0]).end(), data[1]) != connections.at(data[0]).end()){
             std::cout << "Line " << lineNum << " of file " << path << " is a duplicate" << std::endl;
@@ -315,6 +336,10 @@ void Campus::printShortestPath(std::string start, std::string end){
         std::cout << "There are not enough buildings to run this BFS search" << std::endl;
         return;
     }
+    if (trimmedEnd == trimmedStart){
+        std::cout << "The shortest path from \"" << start << "\" to \"" << end << "\" has a distance of 0, as both locations are the same building" << std::endl;
+        return;
+    }
     std::unordered_map<std::string, std::pair<int, std::string>> buildings2;
     
     bool knownStart, knownEnd = false;
@@ -429,6 +454,47 @@ void Campus::printConnectivityReport(){
         }
     }
 
+    std::cout << "There are " << componentCount(std::unordered_map<std::string,bool>()) << " connected components in the graph" << std::endl;
+
 
    
+}
+
+int Campus::componentCount(std::unordered_map<std::string, bool> current){
+    if (current.size() == 0){
+        for (std::string build: buildings){
+            current[build] = false;
+        }
+    }
+    std::string start = "";
+    bool incomplete = false;
+    for (std::pair<std::string, bool> build : current){
+        if (build.second == false){
+            start = build.first;
+            incomplete = true;
+            break;
+        }
+    }
+
+    if (!incomplete){
+        return 0;
+    }
+    std::queue<std::string> q;
+    q.push(start);
+    current.at(start) = true;
+    while (!q.empty()){
+        std::queue<std::string> tracking = q;
+        q = std::queue<std::string>();
+        while (!tracking.empty()){
+            std::string i = tracking.front();
+            for (std::string adj : connections.at(i)){
+                if (!current.at(adj)){
+                    q.push(adj);
+                    current.at(adj) = true;
+                }
+            }
+            tracking.pop();
+        }
+    }
+    return componentCount(current) + 1;
 }
